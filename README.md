@@ -1,28 +1,23 @@
-## Usage
+# Тестовое задание: Карточки пользователей
+
+Это приложение представляет собой интерфейс для отображения и управления карточками пользователей. Оно разработано с использованием SolidJS и включает в себя функционал пагинации, обновления данных и редактирования имен пользователей.
+
+## Установка
+
+Для установки зависимостей проекта выполните следующую команду:
 
 ```bash
-$ npm install # or pnpm install or yarn install
+yarn install
 ```
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+Для запуска проекта выполните следующую команду:
 
-## Available Scripts
+```bash
+yarn dev
+```
 
-In the project directory, you can run:
+# Комментарии к выполнению
 
-### `npm run dev`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-Learn more about deploying your application with the [documentations](https://vite.dev/guide/static-deploy.html)
+Я выполнил все условия задания. Хотелось, конечно, разбить всё на более мелкие компоненты, но в целом сверстал всё как надо, за исключением работы с SVG иконкой. Как костыль, мог бы просто выгрузить из Figma в разных цветах, а так не получилось изменить цвет напрямую в стилях. И в последней карточке не сделал набор подключённых каналов, хотя мог бы и накидать стили, но не вижу смысла.
+Трудностей при работе не возникло, всё интуитивно понятно, как работать с Solid.js.
+Писал стили как напрямую в class, так и выносил в SCSS препроцессор. Для оптимизации использовал createMemo, а для работы с инпутом применил Debounce.
