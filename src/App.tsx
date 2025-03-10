@@ -1,5 +1,5 @@
 import { createQuery } from '@tanstack/solid-query';
-import { createEffect, createSignal, Show, For } from 'solid-js';
+import { createSignal, Show, For, onCleanup } from 'solid-js';
 import { fetchUsers } from './api/apiClient';
 import { Card } from './Card';
 
@@ -7,9 +7,9 @@ function App() {
   const [error, setError] = createSignal<string | null>(null);
   const [currentPage, setCurrentPage] = createSignal(1);
   const [itemsPerPage, setItemsPerPage] = createSignal(4);
-  const [displayedUsers, setDisplayedUsers] = createSignal([]);
 
-  const query = createQuery<any, Error>(() => ['users'], fetchUsers, {
+  const query = createQuery<any, Error>(() => ['users', currentPage(), itemsPerPage()], 
+    () => fetchUsers(currentPage(), itemsPerPage()), {
     onError: (err: Error) => {
       console.error('Error fetching users:', err);
       setError(`Ошибка при загрузке пользователей: ${err.message}`);
@@ -17,15 +17,7 @@ function App() {
     },
   });
 
-  createEffect(() => {
-    if (query.data) {
-      const startIndex = (currentPage() - 1) * itemsPerPage();
-      const endIndex = startIndex + itemsPerPage();
-      setDisplayedUsers(query.data.slice(startIndex, endIndex));
-    }
-  });
-
-  const totalPages = () => query.data ? Math.ceil(query.data.length / itemsPerPage()) : 0;
+  const totalPages = () => query.data ? Math.ceil(query.data.total / itemsPerPage()) : 0;
 
   const nextPage = () => {
     if (currentPage() < totalPages()) {
@@ -44,9 +36,44 @@ function App() {
     setCurrentPage(1);
   };
 
+  const refreshData = () => {
+    query.refetch();
+  };
+
+  // Автоматическое обновление каждые 10 минут
+  const autoRefreshInterval = setInterval(() => {
+    refreshData();
+  }, 10 * 60 * 1000);
+
+  // Очистка интервала при размонтировании компонента
+  onCleanup(() => clearInterval(autoRefreshInterval));
+
   return (
     <div class='p-5'>
       <h1 class="text-2xl font-bold mb-4">Card</h1>
+      <div class="mb-4 flex justify-between items-center">
+        <div>
+          <span class="mr-2">Элементов на странице:</span>
+          <select 
+            value={itemsPerPage()} 
+            onChange={(e) => changeItemsPerPage(parseInt(e.currentTarget.value))}
+            class="border rounded p-1 bg-white"
+          >
+            <option value="4">4</option>
+            <option value="8">8</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+        <button 
+          onClick={refreshData}
+          class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        >
+          Обновить
+        </button>
+      </div>
+      <div>
+          {error() && <span class="text-red-500">{error()}</span>}
+      </div>
       <Show
         when={!query.isLoading}
         fallback={
@@ -58,7 +85,7 @@ function App() {
         }
       >
         <ul class='flex flex-wrap gap-5'>
-          <For each={query.data}>
+          <For each={query.data?.users}>
             {(user, index) => (
               <li id={user.id} class="mb-2 animate-lift-slow" style={`animation-delay: ${index() * 50}ms`}>
                 <Card user={user.name} web={user.website} status={1}></Card>
@@ -66,6 +93,23 @@ function App() {
             )}
           </For>
         </ul>
+        <div class="mt-4 flex justify-between items-center">
+          <button 
+            onClick={prevPage} 
+            disabled={currentPage() === 1}
+            class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+          >
+            Предыдущая
+          </button>
+          <span>Страница {currentPage()} из {totalPages()}</span>
+          <button 
+            onClick={nextPage} 
+            disabled={currentPage() === totalPages()}
+            class="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+          >
+            Следующая
+          </button>
+        </div>
       </Show>
     </div>
   );
