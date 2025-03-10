@@ -88,7 +88,7 @@ function App() {
           <For each={query.data?.users}>
             {(user, index) => (
               <li id={user.id} class="mb-2 animate-lift-slow" style={`animation-delay: ${index() * 50}ms`}>
-                <Card user={user.name} web={user.website} status={1}></Card>
+                <Card userId={user.id} user={user.name} web={user.website} status={1}></Card>
               </li>
             )}
           </For>

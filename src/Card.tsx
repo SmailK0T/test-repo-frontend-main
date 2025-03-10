@@ -6,16 +6,46 @@ import tg from './image/Telegram_2019_Logo.svg 1.svg'
 import down from './image/button.svg'
 import reight from './image/Vector (3).svg'
 import bell from './image/bell.svg'
-import { createSignal } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
+import { debounce } from './utils/debounce';
+import { updateUser } from './api/apiClient';
 
-export const Card = (props: { user: string, web: string, status: number }) => {
+export const Card = (props: { userId: string, user: string, web: string, status: number }) => {
     const [isToggled, setIsToggled] = createSignal(false);
     const [isShowInfo, setShowInfo] = createSignal(false);
     const [isShowAddInfo, setShowAddInfo] = createSignal(false);
+    const [isEditing, setIsEditing] = createSignal(false);
+    const [userName, setUserName] = createSignal(props.user);
 
     const toggleSwitch = () => setIsToggled(!isToggled());
     const toggleInfo = () => setShowInfo(!isShowInfo());
     const toggleAddInfo = () => setShowAddInfo(!isShowAddInfo());
+
+    const debouncedUpdate = debounce((newName: string) => {
+        updateUser(props.userId, { name: newName })
+            .then(() => console.log('User name updated successfully'))
+            .catch((error) => console.error('Error updating user name:', error));
+    }, 500);
+
+    createEffect(() => {
+        if (userName() !== props.user) {
+            debouncedUpdate(userName());
+        }
+    });
+
+    const handleDoubleClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleBlur = () => {
+        setIsEditing(false);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            setIsEditing(false);
+        }
+    };
 
     return (
         <div class="card">
@@ -38,11 +68,23 @@ export const Card = (props: { user: string, web: string, status: number }) => {
             </div>
 
             <div class='card__name-box'>
-                <h2 class="card__name-box-title">
-                    {props.user}
-                </h2>
-                <button class={`card__name-box-button ${isShowInfo()?'show-info' : ''}`}
-                        onClick={toggleInfo}>
+                {isEditing() ? (
+                    <input
+                        type="text"
+                        value={userName()}
+                        onInput={(e) => setUserName(e.currentTarget.value)}
+                        onBlur={handleBlur}
+                        onKeyDown={handleKeyDown}
+                        class="card__name-box-input"
+                        autofocus
+                    />
+                ) : (
+                    <h2 class="card__name-box-title" onDblClick={handleDoubleClick}>
+                        {userName()}
+                    </h2>
+                )}
+                <button class={`card__name-box-button ${isShowInfo() ? 'show-info' : ''}`}
+                    onClick={toggleInfo}>
                     <img src={bell} alt="" />
                 </button>
             </div>
@@ -94,7 +136,7 @@ export const Card = (props: { user: string, web: string, status: number }) => {
                 <button class='card__details-button'
                     onClick={toggleAddInfo}>
                     <span class='card__details-button-text'>Детали</span>
-                    <img class={`${isShowAddInfo() ? 'card__details-button-img' : 'card__details-button-img-off' }`} src={down} alt="" />
+                    <img class={`${isShowAddInfo() ? 'card__details-button-img' : 'card__details-button-img-off'}`} src={down} alt="" />
                 </button>
             </div>
         </div>

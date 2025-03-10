@@ -20,3 +20,15 @@ export const fetchUsers = async (page: number, limit: number) => {
     throw new Error('Неизвестная ошибка при загрузке пользователей');
   }
 };
+
+export const updateUser = async (userId: string, userData: { name: string }) => {
+  try {
+    const response = await apiClient.patch(`/users/${userId}`, userData);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.message);
+    }
+    throw new Error('Неизвестная ошибка при обновлении пользователя');
+  }
+};

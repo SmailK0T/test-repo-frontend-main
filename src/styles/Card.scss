@@ -28,8 +28,12 @@
   &__name-box {
     @apply flex items-center justify-between mb-2;
 
+    &-input {
+        @apply w-[240px] bg-white border-b border-gray-300 focus:border-blue-500;
+      }
+
     &-title {
-      @apply text-lg font-bold;
+      @apply w-[240px] text-lg font-bold overflow-hidden whitespace-nowrap text-ellipsis ;
     }
     &-button {
       @apply w-[30px] h-[30px] flex justify-center items-center border border-gray-400 rounded-full;
