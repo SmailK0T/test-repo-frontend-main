@@ -1,0 +1,53 @@
+@import "@/styles/variables.scss";
+
+.app-container {
+  @apply p-5;
+}
+
+.app-title {
+  @apply text-2xl font-bold mb-4;
+}
+
+.loading-spinner {
+  @apply flex items-center justify-center space-x-2 h-20;
+}
+
+.spinner-dot {
+  @apply w-4 h-4 bg-blue-500 rounded-full;
+  animation: pulse 1.4s ease-in-out infinite;
+
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
+
+.user-list {
+  @apply flex flex-wrap gap-5;
+}
+
+.user-item {
+  @apply mb-2;
+  animation: lift-slow 0.3s ease-out forwards;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    @apply opacity-50 scale-75;
+  }
+  50% {
+    @apply opacity-100 scale-100;
+  }
+}
+
+@keyframes lift-slow {
+  from {
+    @apply opacity-0 translate-y-5;
+  }
+  to {
+    @apply opacity-100 translate-y-0;
+  }
+}
