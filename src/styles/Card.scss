@@ -2,19 +2,49 @@
   @apply w-full w-[330px] h-auto bg-white rounded-lg shadow-md p-5;
 
   &__header {
-    @apply flex items-center mb-1;
+    @apply flex items-center justify-between mb-1;
 
-    &-icon {
-      @apply bg-green-100 w-[30px] h-[30px] rounded-lg p-2 mr-2;
+    &-box {
+      @apply flex items-center;
+
+      &-icon {
+        @apply bg-green-100 w-[30px] h-[30px] rounded-lg p-2 mr-2;
+      }
+
+      &-text {
+        @apply text-green-500 font-semibold text-xs;
+      }
     }
 
-    &-text {
-      @apply text-green-500 font-semibold text-xs;
+    &-button {
+      @apply flex items-center justify-center gap-1 w-[110px] h-[24px] bg-orange-200 text-orange-500 font-bold text-xs rounded-md;
+
+      &:hover {
+        @apply bg-orange-300 text-orange-600;
+      }
     }
   }
 
-  &__title {
-    @apply text-lg font-bold mb-4;
+  &__name-box {
+    @apply flex items-center justify-between mb-2;
+
+    &-title {
+      @apply text-lg font-bold;
+    }
+    &-button {
+      @apply w-[30px] h-[30px] flex justify-center items-center border border-gray-400 rounded-full;
+
+      &:hover {
+        @apply bg-gray-300;
+      }
+    }
+    .show-info {
+      @apply bg-green-200 transition duration-500 ease-in-out;
+
+      &:hover {
+        @apply bg-green-300;
+      }
+    }
   }
 
   &__stats {
@@ -23,31 +53,38 @@
     &-item {
       @apply border-r border-gray-300 pr-5 last:border-r-0;
       &-label {
-        @apply mb-3 text-gray-800 font-sans text-xs;
+        @apply mb-3 text-gray-800 font-sans text-xs w-[70px] overflow-hidden whitespace-nowrap text-ellipsis;
       }
 
       &-value {
-        @apply text-xl font-bold;
+        @apply text-xl font-bold font-sans;
       }
     }
   }
 
   &__button {
     @apply gap-2 bg-primary text-white h-[42px] py-2 px-4 rounded-xl flex items-center justify-center text-xs font-semibold;
+
+    &:hover {
+      @apply bg-purple-900;
+    }
+    &:active {
+      @apply bg-purple-800;
+    }
   }
 
   &__channels {
     @apply mb-3;
 
     &-info {
-        @apply flex items-center gap-2;
+      @apply flex items-center gap-2;
 
       &-title {
         @apply text-gray-400 mb-2 text-xs mt-2;
       }
 
       &-img {
-        @apply w-3 h-3;
+        @apply w-3 h-3 cursor-pointer;
       }
     }
 
@@ -58,7 +95,7 @@
         @apply flex items-center text-xs overflow-hidden whitespace-nowrap text-ellipsis w-40;
 
         &-img {
-            @apply mr-2;
+          @apply mr-2;
         }
 
         &-name {
@@ -73,32 +110,67 @@
         @apply w-12 h-6 flex items-center rounded-full p-1 cursor-pointer bg-white border border-gray-300;
         transition: background-color 0.3s ease;
 
+        &:hover {
+            @apply bg-slate-200;
+          }
+
         &.toggled {
           @apply bg-green-200;
+
+          &:hover {
+            @apply bg-green-300;
+          }
         }
 
         &-circle {
           @apply w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out bg-gray-400;
           transition: background-color 0.3s ease, transform 0.3s ease;
 
+          &:hover {
+            @apply bg-slate-500;
+          }
+
           .toggled & {
             @apply translate-x-6 bg-green-500;
+
+            &:hover {
+                @apply bg-slate-600;
+            }
           }
         }
       }
-      
     }
   }
-  
+
   &__details {
     @apply flex justify-center;
+
     &-button {
-        @apply flex items-center gap-2;
+      @apply flex items-center gap-2;
 
-        &-text {
-          @apply text-gray-500 text-sm;
-        }
+      &-text {
+        @apply text-gray-500 text-sm;
 
+        &:hover {
+            @apply text-gray-700;
+          }
+      }
+      &-img {
+        @apply transform rotate-180 transition duration-500 ease-in-out;
+      }
+      &-img-off {
+        @apply transform rotate-0 transition duration-500 ease-in-out;
+      }
     }
+  }
+
+  .paiding {
+    @apply text-gray-500;
+  }
+  .test {
+    @apply text-orange-500;
+  }
+  .pink-up {
+    @apply text-blue-800;
   }
 }
