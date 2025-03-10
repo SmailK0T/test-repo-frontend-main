@@ -79,7 +79,7 @@ export const Card = (props: { userId: string, user: string, web: string, status:
                         autofocus
                     />
                 ) : (
-                    <h2 class="card__name-box-title" onDblClick={handleDoubleClick}>
+                    <h2 class="card__name-box-title" onDblClick={handleDoubleClick} title={userName()}>
                         {userName()}
                     </h2>
                 )}
@@ -92,15 +92,15 @@ export const Card = (props: { userId: string, user: string, web: string, status:
 
             <div class="card__stats">
                 <div class="card__stats-item">
-                    <p class="card__stats-item-label">Сообщений</p>
+                    <p class="card__stats-item-label" title='Сообщений'>Сообщений</p>
                     <p class="card__stats-item-value">289</p>
                 </div>
                 <div class="card__stats-item">
-                    <p class="card__stats-item-label">Отработано</p>
+                    <p class="card__stats-item-label" title='Отработано'>Отработано</p>
                     <p class="card__stats-item-value">270</p>
                 </div>
                 <div class="card__stats-item">
-                    <p class="card__stats-item-label">Эффективность</p>
+                    <p class="card__stats-item-label" title='Эффективность'>Эффективность</p>
                     <p class="card__stats-item-value">96%</p>
                 </div>
             </div>

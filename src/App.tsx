@@ -1,5 +1,5 @@
 import { createQuery } from '@tanstack/solid-query';
-import { createSignal, Show, For, onCleanup } from 'solid-js';
+import { createSignal, Show, For, onCleanup, createMemo } from 'solid-js';
 import { fetchUsers } from './api/apiClient';
 import { Card } from './Card';
 
@@ -48,6 +48,11 @@ function App() {
   // Очистка интервала при размонтировании компонента
   onCleanup(() => clearInterval(autoRefreshInterval));
 
+  const generateRandomStatuses = createMemo(() => {
+    console.log('Generating random statuses...');
+    return query.data?.users.map(() => Math.floor(Math.random() * 4) + 1) || [];
+  });
+
   return (
     <div class='p-5'>
       <h1 class="text-2xl font-bold mb-4">Card</h1>
@@ -86,11 +91,14 @@ function App() {
       >
         <ul class='flex flex-wrap gap-5'>
           <For each={query.data?.users}>
-            {(user, index) => (
-              <li id={user.id} class="mb-2 animate-lift-slow" style={`animation-delay: ${index() * 50}ms`}>
-                <Card userId={user.id} user={user.name} web={user.website} status={1}></Card>
-              </li>
-            )}
+            {(user, index) => {
+              const status = () => generateRandomStatuses()[index()];
+              return (
+                <li id={user.id} class="mb-2 animate-lift-slow">
+                  <Card userId={user.id} user={user.name} web={user.website} status={status()}></Card>
+                </li>
+              );
+            }}
           </For>
         </ul>
         <div class="mt-4 flex justify-between items-center">
